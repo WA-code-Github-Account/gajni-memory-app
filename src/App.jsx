@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 
-const recognition = useMemo(() => {
+function App() {
+  const recognition = useMemo(() => {
     if (typeof window === 'undefined') return null;
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (SpeechRecognition) {
@@ -12,7 +13,6 @@ const recognition = useMemo(() => {
     return null;
   }, []);
 
-function App() {
   const [memories, setMemories] = useState([]);
   const [newMemory, setNewMemory] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
@@ -56,7 +56,7 @@ function App() {
       setIsListening(false);
     };
 
-  }, []);
+  }, [recognition]); // Added recognition to dependency array
 
   const handleListen = () => {
     if (!recognition) {

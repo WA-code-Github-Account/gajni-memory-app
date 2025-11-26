@@ -1,15 +1,16 @@
 {
   "name": "gajni-memory-app",
-  "homepage": "https://<github-username>.github.io/gajni-memory-app",
+  "homepage": "https://WA-code-Github-Account.github.io/gajni-memory-app",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:gh-pages": "cross-env VITE_BASE_PATH=/gajni-memory-app/ npm run build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "predeploy": "npm run build",
+    "predeploy": "npm run build:gh-pages",
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
@@ -21,6 +22,7 @@
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
+    "cross-env": "^10.1.0",
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",

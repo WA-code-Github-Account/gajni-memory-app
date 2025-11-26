@@ -1,13 +1,16 @@
 import React, { useState, useEffect, useMemo } from 'react';
 
-// Speech Recognition setup
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-let recognition;
-if (SpeechRecognition) {
-  recognition = new SpeechRecognition();
-  recognition.continuous = false;
-  recognition.interimResults = false;
-}
+const recognition = useMemo(() => {
+    if (typeof window === 'undefined') return null;
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      const recognitionInstance = new SpeechRecognition();
+      recognitionInstance.continuous = false;
+      recognitionInstance.interimResults = false;
+      return recognitionInstance;
+    }
+    return null;
+  }, []);
 
 function App() {
   const [memories, setMemories] = useState([]);

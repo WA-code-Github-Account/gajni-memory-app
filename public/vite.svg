@@ -1,17 +1,10 @@
-
-     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-       <defs>
-         <linearGradient id="chipGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-           <stop offset="0%" style="stop-color:#11998e;stop-opacity:1" />
-           <stop offset="100%" style="stop-color:#38ef7d;stop-opacity:1" />
-         </linearGradient>
-       </defs>
-       <rect x="15" y="15" width="70" height="70" rx="10" fill="url(#chipGrad)" opacity="0.9"/>      
-       <rect x="25" y="25" width="50" height="50" rx="5" fill="none" stroke="white" stroke-width="2" 
-      opacity="0.7"/>
-      <line x1="30" y1="35" x2="70" y2="35" stroke="white" stroke-width="1.5" opacity="0.8"/>       
-      <line x1="30" y1="45" x2="70" y2="45" stroke="white" stroke-width="1.5" opacity="0.8"/>       
-      <line x1="30" y1="55" x2="70" y2="55" stroke="white" stroke-width="1.5" opacity="0.8"/>       
-      <line x1="30" y1="65" x2="70" y2="65" stroke="white" stroke-width="1.5" opacity="0.8"/>       
-      <circle cx="50" cy="50" r="45" fill="none" stroke="white" stroke-width="1" opacity="0.3"/>    
-    </svg>
+  <g transform="translate(120,0)">
+    <circle cx="50" cy="50" r="45" fill="none" stroke="url(#grad)" stroke-width="0.5" opacity="0.3"/>
+    <circle cx="50" cy="50" r="40" fill="none" stroke="url(#grad)" stroke-width="0.5" opacity="0.4"/>
+    <circle cx="50" cy="50" r="35" fill="url(#grad)"/>
+    <path d="M 30 45 Q 35 40 40 45 T 50 45 T 60 45 T 70 45" 
+          fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+    <path d="M 30 55 Q 35 50 40 55 T 50 55 T 60 55 T 70 55" 
+          fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+    <text x="50" y="92" text-anchor="middle" font-family="Arial" font-size="8" fill="#666" font-weight="bold">Brain Wave</text>
+  </g>

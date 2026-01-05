@@ -19,6 +19,7 @@ function App() {
   const [isListening, setIsListening] = useState(false);
   const [language, setLanguage] = useState('en-US'); // State for language
   const [voices, setVoices] = useState([]);
+  const [audioLevel, setAudioLevel] = useState(0);
 
   // Load voices
   useEffect(() => {
@@ -56,7 +57,18 @@ function App() {
       setIsListening(false);
     };
 
-  }, [recognition]); // Added recognition to dependency array
+    // Simulate audio level for visualization (since we can't get actual audio level)
+    if (isListening) {
+      const interval = setInterval(() => {
+        setAudioLevel(Math.random() * 10 + 5); // Random value between 5-15
+      }, 200);
+
+      return () => clearInterval(interval);
+    } else {
+      setAudioLevel(0);
+    }
+
+  }, [recognition, isListening]); // Added recognition to dependency array
 
   const handleListen = () => {
     if (!recognition) {
@@ -90,7 +102,7 @@ function App() {
     try {
       localStorage.setItem('gajni-memories', JSON.stringify(memories));
     } catch (error) {
-      console.error("Failed to save memories to local storage", error);
+      console.error("Failed to save memories from local storage", error);
     }
   }, [memories]);
 
@@ -116,10 +128,10 @@ function App() {
   const handleSpeak = (textToSpeak) => {
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
-      
+
       const utterance = new SpeechSynthesisUtterance(textToSpeak);
       const selectedVoice = voices.find(voice => voice.lang.startsWith(language));
-      
+
       if (selectedVoice) {
         utterance.voice = selectedVoice;
       } else {
@@ -136,8 +148,24 @@ function App() {
     memory.text.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // Voice visualization component
+  const VoiceVisualization = () => (
+    <div className="voice-visualization">
+      {Array.from({ length: 9 }).map((_, index) => (
+        <div
+          key={index}
+          className="voice-bar"
+          style={{
+            height: isListening ? `${Math.max(10, audioLevel + Math.random() * 10)}px` : '10px',
+            opacity: isListening ? 0.7 + Math.random() * 0.3 : 0.3
+          }}
+        />
+      ))}
+    </div>
+  );
+
   return (
-    <>
+    <div className="app-container">
       <h1>Gajni Memory</h1>
 
       <div className="form-container">
@@ -149,6 +177,7 @@ function App() {
               <option value="ur-PK">Urdu</option>
             </select>
           </div>
+
           <div className="input-container">
             <input
               type="text"
@@ -156,10 +185,18 @@ function App() {
               onChange={(e) => setNewMemory(e.target.value)}
               placeholder="What do you want to remember?"
             />
-            <button type="button" onClick={handleListen} className={`mic-btn ${isListening ? 'listening' : ''}`}>
-              🎤
+            <button
+              type="button"
+              onClick={handleListen}
+              className={`mic-btn ${isListening ? 'listening' : ''}`}
+              title={isListening ? "Stop listening" : "Start listening"}
+            >
+              {isListening ? '🔴' : '🎤'}
             </button>
           </div>
+
+          {isListening && <VoiceVisualization />}
+
           <button type="submit">Add Memory</button>
         </form>
       </div>
@@ -174,28 +211,46 @@ function App() {
       </div>
 
       <ul className="memory-list">
-        {filteredMemories.map(memory => (
-          <li key={memory.id} className="memory-item">
-            <p>{memory.text}</p>
-            <div className="memory-item-footer">
-              <span className="timestamp">{memory.timestamp}</span>
-              <div className="footer-buttons">
-                <button onClick={() => handleSpeak(memory.text)} className="speak-btn">
-                  🔊
-                </button>
-                <button onClick={() => handleDeleteMemory(memory.id)} className="delete-btn">
-                  Delete
-                </button>
+        {filteredMemories.length > 0 ? (
+          filteredMemories.map(memory => (
+            <li key={memory.id} className="memory-item">
+              <p>{memory.text}</p>
+              <div className="memory-item-footer">
+                <span className="timestamp">{memory.timestamp}</span>
+                <div className="footer-buttons">
+                  <button
+                    onClick={() => handleSpeak(memory.text)}
+                    className="speak-btn"
+                    title="Listen to this memory"
+                  >
+                    🔊 Speak
+                  </button>
+                  <button
+                    onClick={() => handleDeleteMemory(memory.id)}
+                    className="delete-btn"
+                    title="Delete this memory"
+                  >
+                    🗑️ Delete
+                  </button>
+                </div>
               </div>
-            </div>
-          </li>
-        ))}
+            </li>
+          ))
+        ) : (
+          <div className="no-memories">
+            {searchTerm ? (
+              <p className="no-results">No memories found for "{searchTerm}"</p>
+            ) : (
+              <p className="empty-state">No memories yet. Add your first memory above!</p>
+            )}
+          </div>
+        )}
       </ul>
 
       <footer className="app-footer">
         <p>Created by : WA.SIDDIQUI ®</p>
       </footer>
-    </>
+    </div>
   );
 }
 
